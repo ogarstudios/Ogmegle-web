@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: lime;
+        }
+        canvas {
+            border: 2px solid lime;
+            background-color: black;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        button {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #333;
+            border: 2px solid lime;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button:active {
+            background-color: lime;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Game</h1>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    
+    <!-- Mobile Controls -->
+    <div class="controls">
+        <button onclick="changeDirection('up')">↑</button>
+    </div>
+    <div class="controls">
+        <button onclick="changeDirection('left')">←</button>
+        <button onclick="changeDirection('down')">↓</button>
+        <button onclick="changeDirection('right')">→</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const gridSize = 20;
+        let snake = [{x: 200, y: 200}];
+        let direction = {x: gridSize, y: 0};
+        let food = {x: 100, y: 100};
+
+        function draw() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, gridSize, gridSize);
+
+            ctx.fillStyle = "lime";
+            snake.forEach(segment => ctx.fillRect(segment.x, segment.y, gridSize, gridSize));
+        }
+
+        function update() {
+            let newHead = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+
+            if (newHead.x === food.x && newHead.y === food.y) {
+                food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+                food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
+            } else {
+                snake.pop();
+            }
+
+            if (newHead.x < 0 || newHead.y < 0 || newHead.x >= canvas.width || newHead.y >= canvas.height || snake.some(s => s.x === newHead.x && s.y === newHead.y)) {
+                alert("Game Over!");
+                snake = [{x: 200, y: 200}];
+                direction = {x: gridSize, y: 0};
+                food = {x: 100, y: 100};
+                return;
+            }
+
+            snake.unshift(newHead);
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+        }
+
+        setInterval(gameLoop, 100);
+
+        function changeDirection(dir) {
+            if (dir === "up" && direction.y === 0) direction = {x: 0, y: -gridSize};
+            if (dir === "down" && direction.y === 0) direction = {x: 0, y: gridSize};
+            if (dir === "left" && direction.x === 0) direction = {x: -gridSize, y: 0};
+            if (dir === "right" && direction.x === 0) direction = {x: gridSize, y: 0};
+        }
+
+        window.addEventListener("keydown", e => {
+            if (e.key === "ArrowUp") changeDirection("up");
+            if (e.key === "ArrowDown") changeDirection("down");
+            if (e.key === "ArrowLeft") changeDirection("left");
+            if (e.key === "ArrowRight") changeDirection("right");
+        });
+    </script>
+</body>
+</html>
