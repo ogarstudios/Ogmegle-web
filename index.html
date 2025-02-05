@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer Snake</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: lime;
+        }
+        canvas {
+            border: 2px solid lime;
+            background-color: black;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        button {
+            width: 60px;
+            height: 60px;
+            margin: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #333;
+            border: 2px solid lime;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        button:active {
+            background-color: lime;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiplayer Snake</h1>
+    <p>Score: <span id="score">0</span></p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <!-- Mobile Controls -->
+    <div class="controls">
+        <button onclick="changeDirection('up')">↑</button>
+    </div>
+    <div class="controls">
+        <button onclick="changeDirection('left')">←</button>
+        <button onclick="changeDirection('down')">↓</button>
+        <button onclick="changeDirection('right')">→</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
